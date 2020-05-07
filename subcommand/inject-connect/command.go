@@ -16,21 +16,14 @@ import (
 	"github.com/deckarep/golang-set"
 	"github.com/hashicorp/consul-k8s/connect-inject"
 	"github.com/hashicorp/consul-k8s/helper/cert"
+	"github.com/hashicorp/consul-k8s/subcommand/flags"
 	"github.com/hashicorp/consul/api"
-	"github.com/hashicorp/consul/command/flags"
 	"github.com/hashicorp/go-hclog"
 	"github.com/mitchellh/cli"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 )
-
-type arrayFlags []string
-
-func (i *arrayFlags) Set(value string) error {
-	*i = append(*i, value)
-	return nil
-}
 
 type Command struct {
 	UI cli.Ui
@@ -113,8 +106,7 @@ func (c *Command) init() {
 			"discovery across Consul namespaces. Only necessary if ACLs are enabled.")
 
 	c.http = &flags.HTTPFlags{}
-	flags.Merge(c.flagSet, c.http.ClientFlags())
-	flags.Merge(c.flagSet, c.http.ServerFlags())
+	flags.Merge(c.flagSet, c.http.Flags())
 
 	c.help = flags.Usage(help, c.flagSet)
 }

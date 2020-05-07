@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hashicorp/consul/command/flags"
+	"github.com/hashicorp/consul-k8s/subcommand/flags"
 	"github.com/hashicorp/go-hclog"
 	"github.com/mitchellh/cli"
 	"github.com/prometheus/common/log"
@@ -44,7 +44,7 @@ func (c *Command) init() {
 
 	c.help = flags.Usage(help, c.flagSet)
 	c.http = &flags.HTTPFlags{}
-	flags.Merge(c.flagSet, c.http.ClientFlags())
+	flags.Merge(c.flagSet, c.http.Flags())
 	c.help = flags.Usage(help, c.flagSet)
 
 	// Wait on an interrupt to exit. This channel must be initialized before
@@ -153,7 +153,7 @@ func (c *Command) validateFlags() error {
 // from command's HTTP flags and returns them as an array of strings.
 func (c *Command) parseConsulFlags() []string {
 	var consulCommandFlags []string
-	c.http.ClientFlags().VisitAll(func(f *flag.Flag) {
+	c.http.Flags().VisitAll(func(f *flag.Flag) {
 		if f.Value.String() != "" {
 			consulCommandFlags = append(consulCommandFlags, fmt.Sprintf("-%s=%s", f.Name, f.Value.String()))
 		}
