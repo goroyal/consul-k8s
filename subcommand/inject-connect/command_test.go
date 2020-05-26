@@ -22,6 +22,22 @@ func TestRun_FlagValidation(t *testing.T) {
 			flags:  []string{"-consul-k8s-image", "foo", "-ca-file", "bar"},
 			expErr: "Error reading Consul's CA cert file \"bar\"",
 		},
+		{
+			flags:  []string{"-consul-k8s-image", "foo", "-default-sidecar-proxy-cpu-limit=unparseable"},
+			expErr: "-default-sidecar-proxy-cpu-limit is invalid",
+		},
+		{
+			flags:  []string{"-consul-k8s-image", "foo", "-default-sidecar-proxy-cpu-request=unparseable"},
+			expErr: "-default-sidecar-proxy-cpu-request is invalid",
+		},
+		{
+			flags:  []string{"-consul-k8s-image", "foo", "-default-sidecar-proxy-memory-limit=unparseable"},
+			expErr: "-default-sidecar-proxy-memory-limit is invalid",
+		},
+		{
+			flags:  []string{"-consul-k8s-image", "foo", "-default-sidecar-proxy-memory-request=unparseable"},
+			expErr: "-default-sidecar-proxy-memory-request is invalid",
+		},
 	}
 
 	for _, c := range cases {
